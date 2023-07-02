@@ -57,16 +57,16 @@ select <test_model>: test_InfoGraph.py,&nbsp;  test_GCL.py,&nbsp;  test_BGRL.py
   ```
 ### Evaluation
 * Above retrieval result file will be saved at:
- ```
- Retrieval_result/<model>/<graph encode form>/<batch size>/<run id>/<retrieval_res>
- ```
+  ```
+  Retrieval_result/<model>/<graph encode form>/<batch size>/<run id>/<retrieval_res>
+  ```
 * usage:
- ```
- $ cd Retrieval_result/
- $ ./trec_eval/trec_eval ./NTCIR12_MathWiki-qrels_judge.dat <retrieval file path> | grep bpref
- ```
+  ```
+  $ cd Retrieval_result/
+  $ ./trec_eval/trec_eval ./NTCIR12_MathWiki-qrels_judge.dat <retrieval file path> | grep bpref
+  ```
 * example:
- ```
- $ cd Retrieval_result/
- $ ./trec_eval/trec_eval NTCIR12_MathWiki-qrels_judge.dat GCL/opt/2048/1/retrieval_res5_1_end | grep bpref
- ```
+  ```
+  $ cd Retrieval_result/
+  $ ./trec_eval/trec_eval NTCIR12_MathWiki-qrels_judge.dat GCL/opt/2048/1/retrieval_res5_1_end | grep bpref
+  ```
