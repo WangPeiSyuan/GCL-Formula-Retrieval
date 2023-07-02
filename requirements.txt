@@ -1,0 +1,11 @@
+dgl==1.0.1
+networkx==2.8.4
+numpy==1.23.5
+PyGCL==0.1.2
+scikit-learn==1.2.1
+torch==1.13.1
+torch-geometric==2.3.0
+torchaudio==0.13.1
+torchmetrics==0.11.4
+torchvision==0.14.1
+tqdm==4.65.0

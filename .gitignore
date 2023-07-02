@@ -1,0 +1,5 @@
+__pycache__/
+model
+Retrieval_result/trec_eval/
+datasets/encoder/opt_list.txt
+datasets/encoder/slt_list.txt
