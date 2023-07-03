@@ -24,6 +24,9 @@ import json
 from FormulaRetrieval import FormulaRetrieval
 from EquationData import Equation
 
+
+device_name = 'cuda' if torch.cuda.is_available() else 'cpu'
+
 def make_gin_conv(input_dim, out_dim):
     return GINConv(nn.Sequential(nn.Linear(input_dim, out_dim), nn.ReLU(), nn.Linear(out_dim, out_dim)))
 
@@ -78,7 +81,7 @@ def get_embedding(encoder_model, dataloader):
     encoder_model.eval()
     with torch.no_grad():    
         for data in dataloader:
-            data = data.to('cuda')
+            data = data.to(device_name)
             if data.x is None:
                 num_nodes = data.batch.size(0)
                 data.x = torch.ones((num_nodes, 1), dtype=torch.float32, device=data.batch.device)
@@ -139,7 +142,7 @@ def main():
     slt_path = 'Retrieval_result/GCL/slt/'+str(batch_size)+'/'+run_id+'/model'
     opt_path = 'Retrieval_result/GCL/opt/'+str(batch_size)+'/'+run_id+'/model'
 
-    device = torch.device('cuda')
+    device = torch.device(device_name)
 
     gconv = GConv(input_dim=input_dim, hidden_dim=hidden_dim, num_layers=2).to(device)
     model_slt = Encoder(encoder=gconv).to(device)

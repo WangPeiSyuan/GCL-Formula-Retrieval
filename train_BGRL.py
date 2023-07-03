@@ -18,6 +18,9 @@ import numpy as np
 from FormulaRetrieval import FormulaRetrieval
 from EquationData import Equation
 
+
+device_name = 'cuda' if torch.cuda.is_available() else 'cpu'
+
 class Normalize(torch.nn.Module):
     def __init__(self, dim=None, norm='batch'):
         super().__init__()
@@ -127,7 +130,7 @@ def train(encoder_model, contrast_model, dataloader, optimizer, global_steps):
     total_loss = 0
 
     for data in dataloader:
-        data = data.to('cuda')
+        data = data.to(device_name)
         if data.x is None:
             num_nodes = data.batch.size(0)
             data.x = torch.ones((num_nodes, 1), dtype=torch.float32).to(data.batch.device)
@@ -158,7 +161,7 @@ def get_embedding(encoder_model, dataloader):
     with torch.no_grad():    
         for data in dataloader:
     #         print(graph_id)
-            data = data.to('cuda')
+            data = data.to(device_name)
             if data.x is None:
                 num_nodes = data.batch.size(0)
                 data.x = torch.ones((num_nodes, 1), dtype=torch.float32, device=data.batch.device)
@@ -220,7 +223,7 @@ def main():
     query_dataloader = DataLoader(query_dataset, batch_size=20) 
     judge_dataset = Equation(encode=encode, training=False, judge=True, pretrained=pretrained)
     judge_dataloader = DataLoader(judge_dataset, batch_size=256)
-    device = torch.device('cuda')
+    device = torch.device(device_name)
 
     aug1 = A.Compose([A.EdgeRemoving(pe=0.2), A.FeatureMasking(pf=0.1)])
     aug2 = A.Compose([A.EdgeRemoving(pe=0.2), A.FeatureMasking(pf=0.1)])
