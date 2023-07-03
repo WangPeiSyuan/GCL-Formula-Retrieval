@@ -74,10 +74,20 @@ Choose one of the following <train_model> options: "train_query_InfoGraph_slt_pl
 * To perform the evaluation, follow these steps:
   ```
   $ cd Retrieval_result/
-  $ ./trec_eval/trec_eval ./NTCIR12_MathWiki-qrels_judge.dat <retrieval file path> | grep bpref
   ```
-* Example:
-  ```
-  $ cd Retrieval_result/
-  $ ./trec_eval/trec_eval NTCIR12_MathWiki-qrels_judge.dat GCL/opt/2048/1/retrieval_res5_1_end | grep bpref
-  ```
+  * For partial relvent:
+   ```
+   $ ./trec_eval/trec_eval ./NTCIR12_MathWiki-qrels_judge.dat <retrieval file path> | grep bpref
+   ```
+  * Example:
+   ```
+   $ ./trec_eval/trec_eval ./NTCIR12_MathWiki-qrels_judge.dat GCL/opt/2048/1/retrieval_res5_1_end | grep bpref
+   ```
+  * For full relevent
+   ```
+   $ ./trec_eval/trec_eval -l3 ./NTCIR12_MathWiki-qrels_judge.dat <retrieval file path> | grep bpref
+   ```
+  * Example:
+   ```
+   $ ./trec_eval/trec_eval -l3 ./NTCIR12_MathWiki-qrels_judge.dat GCL/opt/2048/1/retrieval_res5_1_end | grep bpref
+   ```
