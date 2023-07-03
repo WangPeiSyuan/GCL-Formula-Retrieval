@@ -20,6 +20,7 @@ import json
 from FormulaRetrieval import FormulaRetrieval
 from EquationData import Equation
 
+device_name = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 class Normalize(torch.nn.Module):
     def __init__(self, dim=None, norm='batch'):
@@ -133,7 +134,7 @@ def get_embedding(encoder_model, dataloader):
     emb = {}
     with torch.no_grad():    
         for data in dataloader:
-            data = data.to('cuda')
+            data = data.to(device_name)
             if data.x is None:
                 num_nodes = data.batch.size(0)
                 data.x = torch.ones((num_nodes, 1), dtype=torch.float32, device=data.batch.device)
@@ -188,7 +189,7 @@ def main():
     slt_path = 'Retrieval_result/BGRL/slt/'+str(batch_size)+'/'+run_id+'/model'
     opt_path = 'Retrieval_result/BGRL/opt/'+str(batch_size)+'/'+run_id+'/model'
 
-    device = torch.device('cuda')
+    device = torch.device(device_name)
 
     judge_data_opt, query_data_opt = get_dataset(encode='opt', pretrained=pretrained, batch_size=batch_size)
     judge_data_slt, query_data_slt = get_dataset(encode='slt', pretrained=pretrained, batch_size=batch_size)

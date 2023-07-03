@@ -19,6 +19,8 @@ from FormulaRetrieval import FormulaRetrieval
 from EquationData import Equation
 
 
+device_name = 'cuda' if torch.cuda.is_available() else 'cpu'
+
 
 def make_gin_conv(input_dim, out_dim):
     return GINConv(nn.Sequential(nn.Linear(input_dim, out_dim), nn.ReLU(), nn.Linear(out_dim, out_dim)))
@@ -89,7 +91,7 @@ def train(encoder_model, contrast_model, dataloader, optimizer, global_steps):
     encoder_model.train()
     epoch_loss = 0
     for data in dataloader:
-        data = data.to('cuda')
+        data = data.to(device_name)
         optimizer.zero_grad()
 
         if data.x is None:
@@ -110,7 +112,7 @@ def get_embedding(encoder_model, dataloader):
     emb = {}
     encoder_model.eval()
     for data in dataloader:
-        data = data.to('cuda')
+        data = data.to(device_name)
         if data.x is None:
             num_nodes = data.batch.size(0)
             data.x = torch.ones((num_nodes, 1), dtype=torch.float32, device=data.batch.device)
@@ -175,7 +177,7 @@ def main():
     query_dataloader = DataLoader(query_dataset, batch_size=20) 
     judge_dataset = Equation(encode=encode, training=False, judge=True, pretrained=pretrained)
     judge_dataloader = DataLoader(judge_dataset, batch_size=256)
-    device = torch.device('cuda')
+    device = torch.device(device_name)
 
     gconv = GConv(input_dim=input_dim, hidden_dim=hidden_dim, activation=torch.nn.ReLU, num_layers=2).to(device)
     fc1 = FC(hidden_dim=hidden_dim*2)
@@ -203,6 +205,8 @@ def main():
 
     file_path = "Retrieval_result/InfoG/"+encode+"/"+str(batch_size)+"/"+str(run_id)
     torch.save(encoder_model.state_dict(), file_path+"/model")
+
+
 if __name__ == '__main__':
     main()
 
