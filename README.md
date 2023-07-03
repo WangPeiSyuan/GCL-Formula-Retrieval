@@ -33,8 +33,8 @@ $ tar zxvf opt_list.txt.tgz
 $ tar zxvf slt_list.txt.tgz
 ```
 
-### Train
-Choose one of the following <train_model> options: "train_InfoGraph.py", "train_GCL.py", or "train_BGRL.py".
+### Training using SLT or OPT encoding alone
+Choose one of the following <train_model> options: "train_query_InfoGraph_slt_or_opt.py", "train_query_GCL_slt_or_opt.py", or "train_query_BGRL_slt_or_opt.py".
 * Usage:
   ```
   $ python <train_model>
@@ -45,14 +45,14 @@ Choose one of the following <train_model> options: "train_InfoGraph.py", "train_
   ```
 * Example:
   ```
-  $ python train_InfoGraph.py --encode opt --bs 2048 --pretrained --run_id 1
+  $ python train_query_InfoGraph_slt_or_opt.py --encode opt --bs 2048 --pretrained --run_id 1
   ```
 
-### Combine SLT and OPT
+### Training using both SLT and OPT encodings
 
 This script assumes that both the slt embedding and opt embedding are generated.
 
-Choose one of the following <test_model> options: "test_InfoGraph.py", "test_GCL.py", or "test_BGRL.py".
+Choose one of the following <train_model> options: "train_query_InfoGraph_slt_plus_opt.py", "train_query_GCL_slt_plus_opt.py", or "train_query_BGRL_slt_plus_opt.py".
 
 * Usage:
   ```
@@ -63,7 +63,7 @@ Choose one of the following <test_model> options: "test_InfoGraph.py", "test_GCL
   ```
 * Example:
   ```
-  $ python test_InfoGraph.py --bs 2048 --pretrained --run_id 1
+  $ python train_query_InfoGraph_slt_plus_opt.py --bs 2048 --pretrained --run_id 1
   ```
 
 ### Evaluation
