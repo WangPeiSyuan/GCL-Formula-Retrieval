@@ -103,11 +103,9 @@ class Encoder(torch.nn.Module):
         x2, edge_index2, edge_weight2 = aug2(x, edge_index, edge_weight)
 
 
-        h, h_online = self.online_encoder(x, edge_index, edge_weight)
         h1, h1_online = self.online_encoder(x1, edge_index1, edge_weight1)
         h2, h2_online = self.online_encoder(x2, edge_index2, edge_weight2)
 
-        g = global_add_pool(h, batch)
         g1 = global_add_pool(h1, batch)
         h1_pred = self.predictor(h1_online)
         g2 = global_add_pool(h2, batch)
@@ -116,10 +114,9 @@ class Encoder(torch.nn.Module):
         with torch.no_grad():
             _, h1_target = self.get_target_encoder()(x1, edge_index1, edge_weight1)
             _, h2_target = self.get_target_encoder()(x2, edge_index2, edge_weight2)
-            g1_target = global_add_pool(h1_target, batch)
-            g2_target = global_add_pool(h2_target, batch)
+            
 
-        return g1, g2, h1_pred, h2_pred, h1_target, h2_target, g1_target, g2_target
+        return g1, g2, h1_pred, h2_pred, h1_target, h2_target
 
 def batch_detatch(batch_index, embs, emb_dict):
     tmp_dict = dict(zip(batch_index, embs))
@@ -136,7 +133,7 @@ def train(encoder_model, contrast_model, dataloader, optimizer, global_steps):
             data.x = torch.ones((num_nodes, 1), dtype=torch.float32).to(data.batch.device)
 
         optimizer.zero_grad()
-        _, _, h1_pred, h2_pred, h1_target, h2_target, _, _ = encoder_model(data.x, data.edge_index, batch=data.batch)
+        _, _, h1_pred, h2_pred, h1_target, h2_target = encoder_model(data.x, data.edge_index, batch=data.batch)
         loss = contrast_model(h1_pred=h1_pred, h2_pred=h2_pred, h1_target=h1_target.detach(), h2_target=h2_target.detach())
 
         loss.backward()
@@ -165,7 +162,7 @@ def get_embedding(encoder_model, dataloader):
             if data.x is None:
                 num_nodes = data.batch.size(0)
                 data.x = torch.ones((num_nodes, 1), dtype=torch.float32, device=data.batch.device)
-            g1, g2, _, _, _, _, _, _ = encoder_model(data.x, data.edge_index, batch=data.batch)
+            g1, g2, _, _, _, _= encoder_model(data.x, data.edge_index, batch=data.batch)
             z = torch.cat([g1, g2], dim=1)
             batch_detatch(data.y, z.detach().cpu().numpy(), emb)
     # x = torch.cat(x, dim=0)
@@ -242,7 +239,6 @@ def main():
         loss, global_steps = train(encoder_model, contrast_model, train_dataloader, optimizer, global_steps)
         print('Epoch {}: \tLoss:'.format(epoch))
         
-    # test(encoder_model, query_dataloader, train_dataloader, str(epochs), run_id, encode, 'BGRL', batch_size)
     test(encoder_model, query_dataloader, judge_dataloader, 'end', run_id, encode, 'BGRL', batch_size)
     
     file_path = "Retrieval_result/BGRL/"+encode+"/"+str(batch_size)+"/"+str(run_id)

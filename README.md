@@ -56,7 +56,7 @@ Choose one of the following <train_model> options: "train_query_InfoGraph_slt_pl
 
 * Usage:
   ```
-  $ python <test_model>
+  $ python <train_model>
     --bs <batch size>
     --pretrained <set to use Tangent-CFT embedding as feature>
     --run_id <run id>
@@ -75,19 +75,22 @@ Choose one of the following <train_model> options: "train_query_InfoGraph_slt_pl
   ```
   $ cd Retrieval_result/
   ```
-  * For partial relvent:
-   ```
-   $ ./trec_eval/trec_eval ./NTCIR12_MathWiki-qrels_judge.dat <retrieval file path> | grep bpref
-   ```
-  * Example:
-   ```
-   $ ./trec_eval/trec_eval ./NTCIR12_MathWiki-qrels_judge.dat GCL/opt/2048/1/retrieval_res5_1_end | grep bpref
-   ```
-  * For full relevent
-   ```
-   $ ./trec_eval/trec_eval -l3 ./NTCIR12_MathWiki-qrels_judge.dat <retrieval file path> | grep bpref
-   ```
-  * Example:
-   ```
-   $ ./trec_eval/trec_eval -l3 ./NTCIR12_MathWiki-qrels_judge.dat GCL/opt/2048/1/retrieval_res5_1_end | grep bpref
-   ```
+Choose one of the following <measure> options:
+"bpref" or "ndcg"
+* Usage:
+  ```
+  $ ./trec_eval/trec_eval -m <measure> ./NTCIR12_MathWiki-qrels_judge.dat <retrieval file path>
+  ```
+* Example:
+  ```
+  $ ./trec_eval/trec_eval -m bpref ./NTCIR12_MathWiki-qrels_judge.dat GCL/opt/2048/1/retrieval_res5_1_end
+  ```
+* For bpref full relevent:
+  ```
+  $ ./trec_eval/trec_eval -m bpref -l3 ./NTCIR12_MathWiki-qrels_judge.dat <retrieval file path>
+  ```
+* Example:
+  ```
+  $ ./trec_eval/trec_eval -m bpref -l3 ./NTCIR12_MathWiki-qrels_judge.dat GCL/opt/2048/1/retrieval_res5_1_end 
+  ```
+  
