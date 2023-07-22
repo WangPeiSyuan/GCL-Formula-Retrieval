@@ -9,12 +9,7 @@ from GCL.models import DualBranchContrast
 from torch_geometric.nn import GINConv, global_add_pool
 from torch_geometric.loader import DataLoader
 
-# print(torch.__version__)
-# print(torch.version.cuda)
-
 from copy import deepcopy
-import pandas as pd
-import numpy as np
 import random
 import argparse 
 import datetime
@@ -91,25 +86,14 @@ def get_embedding(encoder_model, dataloader):
     return emb
 
 def sum_collection(tensor_values_slt, tensor_values_opt):
-    numpy_lst = []
-    index_formula_id = {}
-    idx = 0
-    for formula_id in tensor_values_slt:
-        temp = tensor_values_slt[formula_id]
-        if formula_id in tensor_values_opt:
-            temp = np.add(temp, tensor_values_opt[formula_id])
-        print(temp.shape)
-     
-        numpy_lst.append(temp)
-        index_formula_id[formula_id] = temp
-    
+    result = {}
+    avg_opt = sum(tensor_values_opt.values())/float(len(tensor_values_opt))
+    avg_slt = sum(tensor_values_slt.values())/float(len(tensor_values_slt))
     for formula_id in tensor_values_opt:
-        if formula_id not in tensor_values_slt:
-            index_formula_id[formula_id] =tensor_values_opt[formula_id]
-    # temp = np.concatenate(numpy_lst, axis=0)
-    # tensor_values = Variable(torch.tensor(temp).double()).cuda()
-    print(len(index_formula_id))
-    return index_formula_id
+        temp = tensor_values_opt[formula_id]*0.2 + tensor_values_slt[formula_id]*0.8
+        result[formula_id] = temp
+    return result
+
 
 def get_dataset(encode, pretrained, batch_size):
     judge_dataset = Equation(encode=encode, training=False, pretrained=pretrained, judge=True)

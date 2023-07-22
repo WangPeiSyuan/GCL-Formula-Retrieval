@@ -11,8 +11,6 @@ from torch_geometric.loader import DataLoader
 from torch_geometric.nn.inits import uniform
 
 from copy import deepcopy
-import pandas as pd
-import numpy as np
 import random
 import argparse 
 import datetime
@@ -104,8 +102,6 @@ def get_embedding(encoder_model, dataloader):
 
 def sum_collection(tensor_values_slt, tensor_values_opt):
     result = {}
-    print(len(tensor_values_opt))
-    print(len(tensor_values_slt))
     avg_opt = sum(tensor_values_opt.values())/float(len(tensor_values_opt))
     avg_slt = sum(tensor_values_slt.values())/float(len(tensor_values_slt))
     for formula_id in tensor_values_opt:
@@ -174,6 +170,7 @@ def main():
     result.create_retrieval_file('combine', 'InfoG', batch_size=batch_size, epoch='end', run_id=run_id)
 
 
-    
+if __name__ == '__main__':
+    main()  
 
 

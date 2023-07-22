@@ -10,8 +10,6 @@ from torch_geometric.nn import GINConv, global_add_pool
 from torch_geometric.loader import DataLoader
 
 from copy import deepcopy
-import pandas as pd
-import numpy as np
 import random
 import argparse 
 import datetime
@@ -104,11 +102,9 @@ class Encoder(torch.nn.Module):
         x2, edge_index2, edge_weight2 = aug2(x, edge_index, edge_weight)
 
 
-        h, h_online = self.online_encoder(x, edge_index, edge_weight)
         h1, h1_online = self.online_encoder(x1, edge_index1, edge_weight1)
         h2, h2_online = self.online_encoder(x2, edge_index2, edge_weight2)
 
-        g = global_add_pool(h, batch)
         g1 = global_add_pool(h1, batch)
         h1_pred = self.predictor(h1_online)
         g2 = global_add_pool(h2, batch)
@@ -116,13 +112,10 @@ class Encoder(torch.nn.Module):
         
         with torch.no_grad():
             _, h1_target = self.get_target_encoder()(x1, edge_index1, edge_weight1)
-            # print("h1_target:", h1_target.size())
             _, h2_target = self.get_target_encoder()(x2, edge_index2, edge_weight2)
-            g1_target = global_add_pool(h1_target, batch)
-            # print("g1_target:", g1_target.size())
-            g2_target = global_add_pool(h2_target, batch)
+           
 
-        return g1, g2, h1_pred, h2_pred, g1_target, g2_target
+        return g1, g2, h1_pred, h2_pred, h1_target, h2_target
 
 
 def batch_detatch(batch_index, embs, emb_dict):
@@ -148,8 +141,6 @@ def get_embedding(encoder_model, dataloader):
 
 def sum_collection(tensor_values_slt, tensor_values_opt):
     result = {}
-    print(len(tensor_values_opt))
-    print(len(tensor_values_slt))
     avg_opt = sum(tensor_values_opt.values())/float(len(tensor_values_opt))
     avg_slt = sum(tensor_values_slt.values())/float(len(tensor_values_slt))
     for formula_id in tensor_values_opt:
