@@ -6,7 +6,11 @@
 Tested under Python 3.10.10 and Conda 4.13.0 in Ubuntu. <br>
 Create conda environment and install the required packages by running the following command:
 ```
-$ conda env create -f environment.yml -n <env_name>
+$ conda install pytorch==1.13.1 torchvision==0.14.1 torchaudio==0.13.1 pytorch-cuda=11.6 -c pytorch -c nvidia
+$ pip install pyg_lib torch_scatter torch_sparse torch_cluster torch_spline_conv -f https://data.pyg.org/whl/torch-1.13.0+cu116.html
+$ pip install dgl==1.0.1+cu116 -f https://data.dgl.ai/wheels/cu116/repo.html
+$ pip install PyGCL
+$ pip install scipy==1.10
 ```
 ### Evaluaion tool
 Evaluation is performed using [trec_eval](https://github.com/usnistgov/trec_eval). Install the tool in the "Retrieval_result/" directory.
