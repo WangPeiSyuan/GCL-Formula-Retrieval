@@ -199,12 +199,11 @@ def main():
 
     for epoch in range(1, epochs+1):
 
-        # lr = adjust_learning_rate(optimizer, base_lr, 0.0001, global_steps, max_steps)
+        lr = adjust_learning_rate(optimizer, base_lr, 0.001, global_steps, max_steps)
         g1, g2, loss, global_steps = train(encoder_model, contrast_model, train_dataloader, optimizer, global_steps)
         print('Epoch {}: \t Loss: {}'.format(epoch, loss))
         loss_list.append(loss)
     
-    # test(encoder_model, query_dataloader, train_dataloader, str(epochs), run_id, encode, 'GCL', batch_size)
     test(encoder_model, query_dataloader, judge_dataloader, 'end', run_id, encode, 'GCL', batch_size)
     
     file_path = "Retrieval_result/GCL/"+encode+"/"+str(batch_size)+"/"+str(run_id)

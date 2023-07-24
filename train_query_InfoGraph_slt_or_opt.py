@@ -200,7 +200,6 @@ def main():
         loss_list.append(loss)
         print('Epoch {}: \t Loss: {}'.format(epoch, loss))
         
-    # test(encoder_model, query_dataloader, train_dataloader, str(epochs), run_id, encode, 'InfoG', batch_size)
     test(encoder_model, query_dataloader, judge_dataloader, 'end', run_id, encode, 'InfoG', batch_size)    
 
     file_path = "Retrieval_result/InfoG/"+encode+"/"+str(batch_size)+"/"+str(run_id)
