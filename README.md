@@ -3,7 +3,7 @@
 ## Setup
 
 ### Packages
-Tested under Python 3.10.10 and Conda 4.13.0 in Ubuntu. <br>
+Tested under Conda 4.13.0 (Python 3.10.10) and [Conda 4.12.0](https://repo.anaconda.com/archive/Anaconda3-2022.05-Linux-x86_64.sh) (Python 3.9.12) in Ubuntu. <br>
 Create conda environment and install the required packages by running the following command:
 ```
 $ conda install pytorch==1.13.1 torchvision==0.14.1 torchaudio==0.13.1 pytorch-cuda=11.6 -c pytorch -c nvidia
